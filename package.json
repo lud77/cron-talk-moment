@@ -2,7 +2,7 @@
   "name": "crontalk-moment",
   "version": "0.0.1",
   "description": "A generator-based interpreter for Crontalk.",
-  "main": "index.js",
+  "main": "src/generator.js",
   "scripts": {
     "clean": "shx rm -rf docs/**/* && true",
     "lint": "eslint src/**/*.js -c conf/build/eslint.json",
@@ -33,8 +33,8 @@
     "shx": "0.1.4"
   },
   "dependencies": {
-    "lodash": "4.17.4",
-    "winston": "2.2.0"
+    "crontalk": "0.0.21",
+    "lodash": "4.17.4"
   },
   "bugs": {
     "url": "https://github.com/lud77/cron-talk-moment/issues"

@@ -1,71 +1,100 @@
-// 'use strict';
-//
-// const ct = require('crontalk');
-// const moment = require('moment');
-// const _ = require('lodash');
-//
-// module.exports = function(formulation, reference) {
-// 	const descriptor = ct.parse(formulation);
-//
-// 	const from = moment(completeDate(_.get(descriptor, 'span.lapse.from', {}), true));
-// 	const to = moment(completeDate(_.get(descriptor, 'span.lapse.to', {}), false));
-//
-// 	console.log(from);
-// 	console.log(to);
-//
-// 	return {
-// 		completeDate: completeDate,
-// 		occurrences: occurrences(descriptor, reference)
-// 	};
-// }
-//
-// /**
-//  *  y   d ->  not valid
-//  *  y m d ->   y  m  d
-//  *        ->  cy cm cd
-//  *
-//  *    m d ->  cy  m  d
-//  *      d ->  cy cm  d
-//  *  y m   ->   y  m  1
-//  *  y     ->   y  1  1
-//  */
-// function completeDate(date, from_to) {
-// 	const newDate = Object.assign({}, date);
-//
-// 	if (newDate.year && (newDate.month == undefined) && newDate.day) {
-// 		throw 'Date not valid ' + JSON.stringify(newDate);
-// 	}
-//
-// 	if ((newDate.year == undefined) && (newDate.month == undefined) && (newDate.day == undefined)) {
-// 		return {
-// 			year: moment().year(),
-// 			month: moment().month(),
-// 			day: moment().day()
-// 		};
-// 	}
-//
-// 	if (newDate.day) {
-// 		newDate.day += 1;
-// 	}
-//
-// 	if (newDate.year && newDate.month && newDate.day) {
-// 		return newDate;
-// 	}
-//
-// 	newDate.year = _.get(newDate, 'year', moment().year());
-//
-// 	const hasDay = (newDate.day !== undefined);
-// 	const baseDay = from_to ? 1 : 31;
-// 	const baseMonth = from_to ? 0 : 11;
-//
-// 	newDate.month = _.get(newDate, 'month', hasDay ? moment().month() : baseMonth);
-// 	newDate.day = _.get(newDate, 'day', baseDay);
-//
-// 	return newDate;
-// }
-//
-// function* occurrences(descriptor, reference) {
-// 	while (true) {
-// 		yield 12;
-// 	}
-// }
+'use strict';
+
+const ct = require('crontalk');
+const moment = require('moment');
+const _ = require('lodash');
+
+const deixisResolver = function(unit, modifier) {
+	return function(moment_obj) {
+		return Object.assign({}, moment_obj).add(modifier, unit);
+	};
+};
+
+
+/*
+{
+    "span": {
+        "days": 3,
+        "lapse": {
+            "from": {
+                "year": 2012,
+                "month": 0,
+                "day": 12
+            }
+        }
+    }
+}
+*/
+
+module.exports = function(formulation, reference) {
+	const descriptor = ct.parse(formulation);
+	return create(descriptor, reference ? moment(reference) : moment());
+}
+
+function create(descriptor, reference) {
+	const from = _.hasIn(descriptor, 'span.lapse.from') ? moment(encode(_.get(descriptor, 'span.lapse.from', {}), true)) : reference;
+	const to = _.hasIn(descriptor, 'span.lapse.to') ? moment(encode(descriptor.span.lapse.to, false)) : null;
+
+	return {
+		encode: encode,
+		occurrences: occurrences(descriptor, reference, from, to)
+	};
+}
+
+function encode(date, from_to) {
+	let ts = moment();
+
+	ts.set('second', from_to ? 0 : 59);
+	ts.set('millisecond', from_to ? 0 : 999);
+
+	if (date.year !== undefined) {
+		ts.set('year', date.year);
+		ts.set('month', from_to ? 0 : 11);
+		ts.set('day', from_to ? 1 : ts.endOf('month'));
+		ts.set('hour', from_to ? 0 : 23);
+		ts.set('minute', from_to ? 0 : 59);
+	}
+
+	if (date.month !== undefined) {
+		ts.set('month', date.month);
+		ts.set('day', from_to ? 1 : ts.endOf('month'));
+		ts.set('hour', from_to ? 0 : 23);
+		ts.set('minute', from_to ? 0 : 59);
+	}
+
+	if (date.day !== undefined) {
+		ts.set('day', date.day);
+		ts.set('hour', from_to ? 0 : 23);
+		ts.set('minute', from_to ? 0 : 59);
+	}
+
+	if (date.hour !== undefined) {
+		ts.set('hour', date.hour);
+		ts.set('minute', from_to ? 0 : 59);
+	}
+
+	if (date.minute !== undefined) {
+		ts.set('minute', date.minute);
+	}
+
+	return ts;
+}
+
+function* occurrences(descriptor, reference, from, to) {
+	let current = from;
+
+	while (true) {
+
+		_.forOwn(descriptor.span, function(value, unit) {
+			if (unit !== 'lapse') {
+				current = current.add(value, unit);
+			}
+		});
+
+		if ((to === null) || current.isBefore(to)) {
+			yield current;
+		} else {
+			break;
+		}
+	}
+}
