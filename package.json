@@ -1,6 +1,6 @@
 {
   "name": "crontalk-moment",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A generator-based interpreter for Crontalk.",
   "main": "src/generator.js",
   "scripts": {
