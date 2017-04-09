@@ -1,5 +1,5 @@
-# generic-nodejs-toolchain v0.0.7
-> A boilerplate for *Node.js* projects.
+# crontalk-moment v0.0.1
+> A generator-based interpreter for Crontalk.
 
 
 
@@ -7,7 +7,7 @@
 
 Clone the repository
 
-	git clone --depth=1 https://github.com/lud77/generic-nodejs-toolchain.git projectFolder
+	git clone --depth=1 git+https://github.com/lud77/cron-talk-moment.git projectFolder
 
 ## Why?
 
