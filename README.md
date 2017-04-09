@@ -11,15 +11,17 @@ Clone the repository
 
 ## Why?
 
-This project contains the basic setup for a Node.js module or app. It includes opinionated tools and configuration for linting, transpilation, testing, code coverage, logging, automatic documentation, and packaging.
+[Crontalk](https:/github.com/lud77/cront-talk) is a library implementing a DSL that allows you to express Cron-like (and more) repeated-events expressions in a human readable syntax.
+However, Crontalk is only a parser and just translates almost-natural-language strings of text into a JSON format.
 
+Crontalk-moment implements the next step, taking Crontalk's JSON output as input and processing it to generate the timestamps of the repeating events.
 
 
 # Features / Usage
 
 ## Code quality
 
-This project includes [ESLint](https://github.com/eslint/eslint) for linting, [Mocha](https://github.com/mochajs/mocha) and [Chai](https://github.com/chaijs/chai) for testing, [Istanbul](https://github.com/gotwarlost/istanbul) for test coverage. 
+This project includes [ESLint](https://github.com/eslint/eslint) for linting, [Mocha](https://github.com/mochajs/mocha) and [Chai](https://github.com/chaijs/chai) for testing, [Istanbul](https://github.com/gotwarlost/istanbul) for test coverage.
 All of the modules are already configured and come with NPM scripts to have them work right out of the box.
 
 The following scripts are available:
@@ -40,7 +42,7 @@ to run Istanbul on the tests, thus providing test coverage statistics and a cove
 
 ## Automation
 
-The [Husky](https://github.com/typicode/husky) module is included to manage Git hooks, with callbacks provided for precommit and prepush. 
+The [Husky](https://github.com/typicode/husky) module is included to manage Git hooks, with callbacks provided for precommit and prepush.
 Both precommit and prepush are currently configured to lint and test the code before every commit and push operation.
 
 A command to bump the Patch version is included:
@@ -55,12 +57,12 @@ this will add 1 to the Patch version number, rebuild the README.md and "git add"
 
 This package provides a system to simplify the generation of README files. The system makes use of the [Handlebars](https://github.com/wycats/handlebars.js/) template engine to allow you to pull values from the package.json automatically and include external partial templates. It also makes use of the [HbsRender](https://github.com/lud77/hbs-render) CLI rendering tool.
 
-The templates (including the source of this README) are kept in the /pkg/readme folder. 
+The templates (including the source of this README) are kept in the /pkg/readme folder.
 
 You can even define your own entries in the package.json file to make them available in the template files. You can see an example of this in action for the "badges" and "documentation" entries in this project's package.json file.
 
 You can rebuild the README by executing:
-	
+
 	npm run build:readme
 
 and you can modify the "build:readme" entry in the "scripts" section of the package.json file to make more or less partials available for the rendering.
@@ -117,7 +119,7 @@ If you want to link to the documentation from the README, you just need to open 
 
 ## Logging
 
-The package includes [Winston](http://github.com/winstonjs/winston) for the logging. 
+The package includes [Winston](http://github.com/winstonjs/winston) for the logging.
 
 
 
