@@ -5,14 +5,13 @@
 
 ## Installation
 
-Clone the repository
+	npm install --save crontalk-moment
 
-	git clone --depth=1 git+https://github.com/lud77/cron-talk-moment.git projectFolder
 
 ## Why?
 
-[Crontalk](https:/github.com/lud77/cront-talk) is a library implementing a DSL that allows you to express Cron-like (and more) repeated-events expressions in a human readable syntax.
-However, Crontalk is only a parser and just translates almost-natural-language strings of text into a JSON format.
+[Crontalk](https://github.com/lud77/cront-talk) is a library and an [NPM module](https://npmjs.com/package/crontalk) implementing a DSL that allows you to express Cron-like (and more) repeated-events expressions in a human readable syntax.
+However, Crontalk is only a parser and just translates natural language strings of text into a custom JSON format.
 
 Crontalk-moment implements the next step, taking Crontalk's JSON output as input and processing it to generate the timestamps of the repeating events.
 As the name suggests, this implementation uses the Moment.js library to compute the timestamps.
@@ -21,6 +20,11 @@ As the name suggests, this implementation uses the Moment.js library to compute 
 # Features / Usage
 
 ## Generator-based interface
+
+    const ctm = require('crontalk-moment');
+	const gen = ctm('every 3 hours');
+
+	console.log(gen.next());
 
 
 
