@@ -1,4 +1,4 @@
-# crontalk-moment v0.0.1
+# crontalk-moment v0.0.2
 > A generator-based interpreter for Crontalk.
 
 
@@ -25,6 +25,11 @@ As the name suggests, this implementation uses the Moment.js library to compute 
 	const gen = ctm('every 3 hours');
 
 	console.log(gen.next());
+
+## Supported features
+
+This module currently only supports the basic Cron features (regular increments in years, months, weeks, days, hours adn/or minutes) with optional start/stop dates.
+
 
 
 
