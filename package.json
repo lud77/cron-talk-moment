@@ -33,7 +33,7 @@
     "shx": "0.1.4"
   },
   "dependencies": {
-    "crontalk": "0.0.21",
+    "crontalk": "0.0.24",
     "lodash": "4.17.4"
   },
   "bugs": {
